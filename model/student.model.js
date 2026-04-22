@@ -19,10 +19,10 @@ const studentSchema = new mongoose.Schema(
       branch: String,
     },
 
-    // otp: {
-    //   code: String,
-    //   expiresAt: Date,
-    // },
+    otp: {
+      code: String,
+      
+    },
   },
   { timestamps: true }
 );

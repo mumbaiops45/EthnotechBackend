@@ -27,3 +27,23 @@ exports.login = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+
+exports.sendResetOtp = async (req, res) => {
+  try {
+    const result = await StudentService.sendResetOtp(req.body);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const result = await StudentService.resetPassword(req.body);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};

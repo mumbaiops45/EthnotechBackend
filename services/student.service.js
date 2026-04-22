@@ -46,3 +46,49 @@ exports.loginUser = async (data) => {
 };
 
 
+exports.sendResetOtp = async (data) => {
+  const {email} = data;
+
+  const student = await Student.findOne({ email });
+  if (!student) {
+    throw new Error("Student not found");
+  }
+
+  const otp = "123456";
+
+  student.otp = {
+    code: otp,
+  };
+
+  await student.save();
+
+  return { message: "OTP sent successfully (hardcoded 123456)" };
+
+}
+
+
+exports.resetPassword = async (data) => {
+  const { email, otp, newPassword } = data;
+
+  const student = await Student.findOne({ email });
+  if (!student) {
+    throw new Error("Student not found");
+  }
+
+  if (!student.otp || student.otp.code !== otp) {
+    throw new Error("Invalid OTP");
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  student.password = hashedPassword;
+
+  
+  student.otp = undefined;
+
+  await student.save();
+
+  return { message: "Password reset successful" };
+};
+
+
