@@ -132,16 +132,71 @@ exports.updateProfile = async (userId, data) => {
   return student.profile;
 }
 
+// aletrnative way
+
+// exports.deleteProfile = async (userId) => {
+//   const student = await Student.findById(userId);
+
+//   if (!student) throw new Error("Student not found");
+
+//   student.profile = undefined;
+
+//   await student.save();
+
+//   return { message: "Profile deleted successfully" };
+// };
+
+
 exports.deleteProfile = async (userId) => {
-  const student = await Student.findById(userId);
+  const student = await Student.findByIdAndUpdate(
+    userId,
+    {$unset: {profile: ""}},
+    {new: true}
+  );
+}
 
-  if (!student) throw new Error("Student not found");
 
-  student.profile = undefined;
 
-  await student.save();
+exports.getAllStudents = async () => {
+  const students = await Student.find({}).select("-password -otp");
+  return students;
+}
 
-  return { message: "Profile deleted successfully" };
+exports.getStudentById = async (studentId) => {
+  const student = await Student.findById(studentId).select("-password -otp");
+  if(!student) throw new Error("Student not found");
+  return student;
+}
+
+exports.adminUpdateProfile = async (studentId , data) => {
+  const student = await Student.findById(studentId).select("-password -otp");
+  if(!student) throw new Error("Student not found");
+
+  const profileUpdate = {};
+  Object.keys(data).forEach((key) => {
+    profileUpdate[`profile.${key}`] = data[key];
+  });
+
+  const updated = await Student.findByIdAndUpdate(
+    studentId,
+    {$set: profileUpdate},
+    {new: true, runValidators: true}
+  ).select("-password -otp");
+
+  return updated.profile;
+ 
+};
+
+
+exports.adminDeleteProfile = async (studentId) => {
+  const student = await Student.findByIdAndUpdate(
+    studentId, 
+    {$unset: {profile: ""}},
+    {new: true}
+  );
+  if(!student) throw new Error("Student not found");
+
+  return {message: "Student profile deleted successfully bu SuperAdmin"};
 };
 
 

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const adminSchema = new mongoose.Schema({
-    name: {
+    fullName: {
         type: String, 
         required: true
     },
@@ -17,5 +17,18 @@ const adminSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-    }
-})
+    },
+    role: {
+        type: String,
+        enum: ["SuperAdmin","BranchAdmin", "Instructor"],
+        default: "BranchAdmin",
+    },
+    branch: {type: String},
+    isActive: {type:Boolean, default: true},
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Admin"
+    },
+}, {timestamps: true});
+
+module.exports = mongoose.model("Admin", adminSchema);

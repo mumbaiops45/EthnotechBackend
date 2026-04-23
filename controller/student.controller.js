@@ -91,7 +91,48 @@ exports.deleteProfile = async (req, res) =>{
 
     res.json(result);
   } catch (error) {
-    res.status(400).json({message: err.deleteProfile});
+    res.status(400).json({message: error.deleteProfile});
+  }
+};
+
+
+exports.getAllStudents = async (req, res) => {
+  try {
+    const students = await StudentService.getAllStudents();
+    res.status(200).json(students);
+  } catch (error) {
+    res.status(400).json({message: error.message});
+  }
+}
+
+exports.getStudentById = async (req, res) => {
+  try {
+    const student = await StudentService.getStudentById(req.params.id);
+    res.status(200).json(student);
+  } catch (error) {
+    res.status(404).json({message: error.message});
+  }
+};
+
+exports.adminUpdateProfile  = async (req, res) => {
+  try {
+    const profile = await StudentService.adminUpdateProfile(req.params.id , req.body);
+    res.status(200).json({
+      message: "Student profile updated by Super Admin",
+      profile,
+    });
+  } catch (error) {
+    res.status(400).json({message: error.message});
+  }
+};
+
+
+exports.adminDeleteProfile = async(req, res) => {
+  try {
+    const result = await StudentService.adminDeleteProfile(req.params.id);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({message: error.message});
   }
 };
 
