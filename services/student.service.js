@@ -91,4 +91,57 @@ exports.resetPassword = async (data) => {
   return { message: "Password reset successful" };
 };
 
+exports.getProfile = async(userId) => {
+  const student = await Student.findById(userId).select("profile");
+
+  if (!student) throw new Error("Student not found");
+
+  return student.profile;
+};
+
+exports.createProfile = async (userId , data) => {
+  const student = await Student.findById(userId);
+
+  if(!student) throw new Error("Student not found");
+
+  if(student.profile && student.profile.fullName){
+        throw new Error("Profile already exists. Use update API");
+  }
+
+  student.profile = data;
+  await student.save();
+
+  return student.profile
+}
+
+exports.updateProfile = async (userId, data) => {
+  const student = await Student.findById(userId);
+
+  if(!student) throw new Error("Student not found");
+
+  if(!student.profile){
+    throw new Error("Profile not found. Create profile first");
+  }
+
+  Object.keys(data).forEach((key) => {
+    student.profile[key] = data[key];
+  });
+
+  await student.save();
+
+  return student.profile;
+}
+
+exports.deleteProfile = async (userId) => {
+  const student = await Student.findById(userId);
+
+  if (!student) throw new Error("Student not found");
+
+  student.profile = undefined;
+
+  await student.save();
+
+  return { message: "Profile deleted successfully" };
+};
+
 

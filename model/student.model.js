@@ -2,6 +2,24 @@
 
 const mongoose = require("mongoose");
 
+
+
+const profileSchema = new mongoose.Schema({
+  fullName: {
+    type: String,
+    trim: true,
+  },
+  photo: { type: String },
+  dob: { type: Date },
+    gender: { type: String, enum: ["Male", "Female", "Other"],
+      required: true
+     },
+     education: { type: String },
+       program: { type: String },
+        branch: { type: String },
+
+}, { _id: false });
+
 const studentSchema = new mongoose.Schema(
   {
     fullName: { type: String },
@@ -10,14 +28,7 @@ const studentSchema = new mongoose.Schema(
     password: { type: String, required: true },
     isVerified: { type: Boolean, default: false },
 
-    profile: {
-      photo: String,
-      dob: Date,
-      gender: String,
-      education: String,
-      program: String,
-      branch: String,
-    },
+    profile: profileSchema,
 
     otp: {
       code: String,
