@@ -1,10 +1,11 @@
 const Instructor = require("../model/Instructor.model");
+const Admin = require("../model/Admin.model");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.login = async ({email, password}) => {
-    const instructor = await Instructor.findOne({email});
-    if(!instructor || !instructor.isActive) throw new Error("Invalid credentials");
+    const instructor = await Admin.findOne({email, role: "Instructor"});
+    if(!instructor || !instructor.isActive) throw new Error("Invalid credentiald");
 
     const isMatch = await bcrypt.compare(password , instructor.password);
     if(!isMatch) throw new Error("Invalid credentials");
@@ -20,13 +21,13 @@ exports.login = async ({email, password}) => {
 };
 
 exports.getProfile = async (id) => {
-    const instructor = await Instructor.findById(id).select("-password");
+    const instructor = await Admin.findById(id).select("-password");
     if(!instructor) throw new Error("Instructor not found");
     return instructor;
 };
 
 exports.updateProfile = async (id, data) => {
-    const updated = await Instructor.findByIdAndUpdate(
+    const updated = await Admin.findByIdAndUpdate(
         id,
         {$set: data},
         {new: true, runValidators: true}

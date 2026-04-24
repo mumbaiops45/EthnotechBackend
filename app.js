@@ -6,7 +6,14 @@ const connectDB = require("./config/db");
 const StudentRoute = require("./routes/student.route");
 const adminRoutes = require("./routes/admin.route");
 const {seedSuperAdmin} =require("./services/admin.service");
+const InstructorRoute = require("./routes/instructor.route");
+const courseRoutes = require("./routes/course.route");
+const lessonRoutes = require("./routes/lesson.route");
+const assignmentRoutes = require("./routes/assignment.route");
+const progressRoutes = require("./routes/progress.route");
+
 const cors = require("cors");
+
 
 app.use(express.json());
 app.use(cors());
@@ -15,13 +22,12 @@ connectDB().then(() => seedSuperAdmin());
 
 app.use("/admins", adminRoutes);
 app.use("/student", StudentRoute);
+app.use("/instructor" , InstructorRoute);
+app.use("/courses",     courseRoutes);
+app.use("/lesson",     lessonRoutes);
+app.use("/assignments", assignmentRoutes);
+app.use("/progress",    progressRoutes);
 
-
-app.get("/check", async (req, res) => {
-  const Admin = require("./model/Admin.model");
-  const admin = await Admin.findOne({ role: "SuperAdmin" });
-  res.json(admin);
-});
 
 app.listen(8080, () => {
   console.log("Server running on port 5000");

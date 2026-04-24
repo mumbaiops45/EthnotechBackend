@@ -1,0 +1,55 @@
+const mongoose = require("mongoose");
+const {Schema} = mongoose;
+
+const progressSchema = new Schema({
+    student :{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Student",
+        required: true
+    },
+    course : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+        required: true
+    },
+    batch: {
+        type: String
+    },
+    lessons:[{
+        lesson: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Lesson"
+        },
+        watchPercent: {
+            type: Number, default: 0
+        },
+        isCompleted: {
+            type:Boolean ,
+            default: false
+        },
+    }],
+    assignments: [{
+        assignment :{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Assignment"
+        },
+        submitted: {
+            type: Boolean ,
+            default: false
+        },
+        score: {
+            type: Number
+        },
+    }],
+    attendancePercent: {
+        type: Number,
+        default: 0
+    },
+    overallCompletion: {
+        type: Number , 
+        default: 0
+    },
+} ,{timestamps: true}) ;
+
+
+module.exports = mongoose.model("Progress" , progressSchema);
