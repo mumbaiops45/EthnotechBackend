@@ -48,7 +48,7 @@ const loginAdmin = async (email , password) => {
 };
 
 const createAdmin = async (data, createdBy) => {
-    const {fullName , email, mobile , password , role, branch} = data;
+    const {fullName , email, mobile , password , role,gender, branch} = data;
 
     if(role === "SuperAdmin") throw new Error("Cannot create another SuperAdmin");
 
@@ -63,6 +63,7 @@ const createAdmin = async (data, createdBy) => {
         mobile,
         password: hashed,
         role,
+        gender,
         branch ,
         createdBy,
     });

@@ -23,6 +23,9 @@ const adminSchema = new mongoose.Schema({
         enum: ["SuperAdmin","BranchAdmin", "Instructor"],
         default: "BranchAdmin",
     },
+    gender: { type: String, enum: ["Male", "Female", "Other"],
+      required: true
+     },
     branch: {type: String},
     isActive: {type:Boolean, default: true},
     createdBy: {
