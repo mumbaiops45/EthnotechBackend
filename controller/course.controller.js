@@ -1,6 +1,7 @@
 const courseService = require("../services/course.service");
 
 
+
 exports.getCourse = async(req, res) => {
     try {
         const instructorId = req.instructor.id;

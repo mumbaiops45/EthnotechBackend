@@ -12,6 +12,11 @@ const lessonRoutes = require("./routes/lesson.route");
 const assignmentRoutes = require("./routes/assignment.route");
 const progressRoutes = require("./routes/progress.route");
 const batchRoutes = require("./routes/batch.route");
+const liveSessionRoutes      = require("./routes/liveSession.route");
+const assignmentReviewRoutes = require("./routes/assignmentReview.route");
+const announcementRoutes     = require("./routes/announcement.route");
+
+
 
 const cors = require("cors");
 
@@ -29,6 +34,9 @@ app.use("/lesson",     lessonRoutes);
 app.use("/assignments", assignmentRoutes);
 app.use("/progress",    progressRoutes);
 app.use("/batches", batchRoutes);
+app.use("/live-sessions",  liveSessionRoutes);
+app.use("/submissions",    assignmentReviewRoutes);
+app.use("/announcements",  announcementRoutes);
 
 
 app.listen(8080, () => {

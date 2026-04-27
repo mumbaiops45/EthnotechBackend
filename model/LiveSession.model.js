@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const liveSessionSchema = new Schema({
     title: {
-        title: String,
+        type: String,
         required: true
     },
     description: {
@@ -43,4 +43,4 @@ const liveSessionSchema = new Schema({
 }, {timestamps: true});
 
 
-module.exports = mongoose.model("LiveSession" , loveSessionSchema);
+module.exports = mongoose.model("LiveSession" , liveSessionSchema);
