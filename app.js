@@ -3,6 +3,7 @@ const app = express()
 const port = 8080
 require("dotenv").config();
 const connectDB = require("./config/db");
+const {runReminderJob} = require("./jobs/reminderJob");
 const StudentRoute = require("./routes/student.route");
 const adminRoutes = require("./routes/admin.route");
 const {seedSuperAdmin} =require("./services/admin.service");
@@ -15,6 +16,8 @@ const batchRoutes = require("./routes/batch.route");
 const liveSessionRoutes      = require("./routes/liveSession.route");
 const assignmentReviewRoutes = require("./routes/assignmentReview.route");
 const announcementRoutes     = require("./routes/announcement.route");
+const attendanceRoutes = require("./routes/attendance.route");
+const calendarRoutes = require("./routes/calendar.route");
 
 
 
@@ -37,8 +40,12 @@ app.use("/batches", batchRoutes);
 app.use("/live-sessions",  liveSessionRoutes);
 app.use("/submissions",    assignmentReviewRoutes);
 app.use("/announcements",  announcementRoutes);
+app.use("/attendance",    attendanceRoutes);
+app.use("/calendar",      calendarRoutes);
 
 
+
+runReminderJob();
 app.listen(8080, () => {
   console.log("Server running on port 5000");
 });

@@ -65,3 +65,25 @@ exports.getCalendar = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+
+exports.uploadRecording = async (req, res) => {
+    try {
+         const { sessionId } = req.params; 
+         const { recordingUrl } = req.body; 
+
+         if (!recordingUrl) {
+            return res.status(400).json({ message: "Recording URL is required" });
+        }
+
+         const session = await liveSessionService.uploadRecording(sessionId, recordingUrl);
+
+        res.status(200).json({
+            message: "Recording uploaded successfully",
+            session
+        });
+
+    } catch (error) {
+        res.status(400).json({message: error.message});
+    }
+}

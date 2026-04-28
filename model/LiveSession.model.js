@@ -6,6 +6,10 @@ const liveSessionSchema = new Schema({
         type: String,
         required: true
     },
+    topic: {
+        type: String,
+        required: true
+    },
     description: {
         type: String
     },
@@ -18,29 +22,46 @@ const liveSessionSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",
     },
+    lesson: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Lesson"
+    },
     instructor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Admin",
         required: true
     },
-    date: {
-        type: Date ,
+
+    scheduledAt: {
+        type: Date,
         required: true
     },
     duration: {
-        type: Number , required: true
+        type: Number,
+        required: true
     },
-    meetLink: {
-        type: String
+    joinLink: {
+        type: String,
+        required: true
     },
+
+    platform: { type: String, enum: ["zoom", "meet", "other"], default: "meet" },
+    linkActiveAt: { type: Date },
+    recordingUrl: { type: String },
+    recordingUploadedAt: { type: Date },
+
     status: {
         type: String,
         enum: ["scheduled", "live", "completed", "cancelled"],
         default: "scheduled"
     },
-    notifiedStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student"}],
 
-}, {timestamps: true});
+    reminder24Sent: { type: Boolean, default: false },
+    reminder15Sent: { type: Boolean, default: false },
+
+    notifiedStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
+
+}, { timestamps: true });
 
 
-module.exports = mongoose.model("LiveSession" , liveSessionSchema);
+module.exports = mongoose.model("LiveSession", liveSessionSchema);
