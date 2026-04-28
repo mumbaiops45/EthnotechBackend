@@ -54,6 +54,17 @@ exports.cancelSession = async (req, res) => {
     }
 };
 
+exports.getJoinStatus = async (req , res) => {
+    try {
+        const result = await liveSessionService.getJoinStatus(req.params.id , req.user._id);
+
+        res.status(200).json(result);
+    } catch (error) {
+       res.status(400).json({ message: error.message }); 
+    }
+}
+
+
 exports.getCalendar = async (req, res) => {
   try {
     const { month, year } = req.query;
@@ -69,7 +80,7 @@ exports.getCalendar = async (req, res) => {
 
 exports.uploadRecording = async (req, res) => {
     try {
-         const { sessionId } = req.params; 
+         const sessionId  = req.params.id; 
          const { recordingUrl } = req.body; 
 
          if (!recordingUrl) {

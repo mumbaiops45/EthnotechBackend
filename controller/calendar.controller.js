@@ -9,7 +9,7 @@ exports.getStudentCalendar = async (req , res) => {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const sessions = await liveSessionService.getStudentCalendar(
+    const sessions = await calendarService.getStudentCalendar(
       studentId, { month, year, course, program }
     );
 
@@ -31,7 +31,7 @@ exports.getWeeklyCalendar = async (req, res) => {
       return res.status(400).json({ message: "Start date is required" });
     }
 
-     const sessions = await liveSessionService.getWeeklyCalendar(
+     const sessions = await calendarService.getWeeklyCalendar(
       studentId, startDate
     );
 

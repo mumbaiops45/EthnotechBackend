@@ -6,6 +6,7 @@ exports.getCourse = async(req, res) => {
     try {
         const instructorId = req.instructor.id;
         const course = await courseService.getCourses(instructorId);
+      
         res.status(200).json(course);
     } catch (error) {
         res.status(404).json({message:error.message});

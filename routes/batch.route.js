@@ -5,6 +5,7 @@ const {protect , superAdminOnly , adminOrAbove} = require("../middlewares/auth.m
 
 router.post("/", protect , adminOrAbove , batchController.createBatch);
 router.get("/", protect , adminOrAbove , batchController.getAllBatches);
+// router.get("/",  batchController.getAllBatches);
 router.get("/:id", protect , adminOrAbove , batchController.getBatchById);
 router.put("/:id", protect , adminOrAbove, batchController.updateBatch);
 router.delete("/:id", protect , superAdminOnly, batchController.deleteBatch);
