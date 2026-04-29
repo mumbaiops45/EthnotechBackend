@@ -90,7 +90,7 @@ const assessmentSchema = new mongoose.Schema({
     },
     deadline: {type: Date},
     isPublished: {
-        type:Booean,
+        type:Boolean,
         default: false
     },
 

@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 
 const adminSchema = new mongoose.Schema({
     fullName: {
-        type: String, 
+        type: String,
         required: true
     },
     email: {
-        type:String,
+        type: String,
         required: true,
         unique: true
     },
     mobile: {
         type: String,
-        unique:  true
+        unique: true
     },
     password: {
         type: String,
@@ -20,18 +20,19 @@ const adminSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["SuperAdmin","BranchAdmin", "Instructor"],
+        enum: ["SuperAdmin", "BranchAdmin", "Instructor"],
         default: "BranchAdmin",
     },
-    gender: { type: String, enum: ["Male", "Female", "Other"],
-      required: true
-     },
-    branch: {type: String},
-    isActive: {type:Boolean, default: true},
+    gender: {
+        type: String, enum: ["Male", "Female", "Other"],
+        required: true
+    },
+    branch: { type: String },
+    isActive: { type: Boolean, default: true },
     createdBy: {
-        type: mongoose.Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Admin"
     },
-}, {timestamps: true});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Admin", adminSchema);

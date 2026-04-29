@@ -4,35 +4,60 @@ const{notifyStudents} = require("../utils/notification");
 const Batch = require("../model/Batch.model");
 
 
-exports.createAssessment = async (instructorId , data) => {
-    let questions = data.questions || [];
-    let totalMarks = 0;
+// exports.createAssessment = async (instructorId , data) => {
+//     let questions = data.questions || [];
+//     let totalMarks = 0;
 
-    if (data.useQuestionBank && data.bankFilters) {
-        const {subject , topic , difficulty , count} = data.bankFilters;
-        const bankQuestions = await Question.aggregate([
-            { $match: {isActive: true , type: "mcq" , ...(subject && { subject}) , ...(topic &&  {topic}), ...(difficulty && {difficulty})}},
-            { $sample: { size: parseInt(count)}}
-        ]);
+//     if (data.useQuestionBank && data.bankFilters) {
+//         const {subject , topic , difficulty , count} = data.bankFilters;
+//         const bankQuestions = await Question.aggregate([
+//             { $match: {isActive: true , type: "mcq" , ...(subject && { subject}) , ...(topic &&  {topic}), ...(difficulty && {difficulty})}},
+//             { $sample: { size: parseInt(count)}}
+//         ]);
 
-        questions = bankQuestions.map(q => ({ question: q._id, marks: q.marks}));
-    }
+//         questions = bankQuestions.map(q => ({ question: q._id, marks: q.marks}));
+//     }
 
-    for (const q of questions) {
-        const question = await Question.findById(q.question);
-        totalMarks += q.marks || question?.marks || 1;
-    }
+//     for (const q of questions) {
+//         const question = await Question.findById(q.question);
+//         totalMarks += q.marks || question?.marks || 1;
+//     }
 
-    const assessment = await Assessment.create({
-        ...data,
-        questions,
-        totalMarks,
-        instructor: instructorId,
-    });
+//     const assessment = await Assessment.create({
+//         ...data,
+//         questions,
+//         totalMarks,
+//         instructor: instructorId,
+//     });
 
-    return assessment;
+//     return assessment;
+// };
+
+// ✅ Fixed createAssessment — properly calculates totalMarks
+exports.createAssessment = async (instructorId, data) => {
+  let questions = data.questions || [];
+  let totalMarks = 0;
+
+  // Calculate total marks from questions
+  for (const q of questions) {
+    const question = await Question.findById(q.question);
+    totalMarks += q.marks || question?.marks || 1; // fallback to 1
+  }
+
+  // If totalMarks still 0, throw error
+  if (totalMarks === 0 && questions.length > 0) {
+    totalMarks = questions.length; // 1 mark per question default
+  }
+
+  const assessment = await Assessment.create({
+    ...data,
+    questions,
+    totalMarks,
+    instructor: instructorId,
+  });
+
+  return assessment;
 };
-
 
 exports.publishAssessment = async (assessmentId , instructorId) =>{
     const assessment = await Assessment.findOneAndUpdate(
@@ -68,7 +93,7 @@ exports.getAssessments = async (instructorId) => {
 
 
 exports.getAssessmentById = async (id) => {
-    return Assessment.findBuId(id)
+    return Assessment.findById(id)
     .populate("questions.question")
     .populate("course" , "title")
     .populate("batch", "name");

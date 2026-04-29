@@ -18,6 +18,10 @@ const assignmentReviewRoutes = require("./routes/assignmentReview.route");
 const announcementRoutes     = require("./routes/announcement.route");
 const attendanceRoutes = require("./routes/attendance.route");
 const calendarRoutes = require("./routes/calendar.route");
+const questionRoutes = require("./routes/question.route");
+const assessmentRoutes = require("./routes/assessment.route");
+const attemptRoutes     = require("./routes/attempt.route");
+const descriptiveRoutes = require("./routes/descriptive.route");
 
 
 
@@ -42,6 +46,10 @@ app.use("/submissions",    assignmentReviewRoutes);
 app.use("/announcements",  announcementRoutes);
 app.use("/attendance",    attendanceRoutes);
 app.use("/calendar",      calendarRoutes);
+app.use("/questions",    questionRoutes);
+app.use("/assessments",  assessmentRoutes);
+app.use("/attempts",     attemptRoutes);
+app.use("/descriptive",  descriptiveRoutes);
 
 
 

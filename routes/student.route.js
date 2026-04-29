@@ -7,7 +7,10 @@ const {auth, protect , superAdminOnly} = require("../middlewares/auth.middleware
 router.post("/register", studentController.register);
 
 
+
 router.post("/login", studentController.login);
+router.post("/authlogin", studentController.loginauth);
+
 router.post("/send-reset-otp", studentController.sendResetOtp);
 
 router.post("/reset-password", studentController.resetPassword);

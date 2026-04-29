@@ -1,4 +1,5 @@
 const Student = require("../model/student.model");
+const Admin = require("../model/Admin.model");
 const {generateOTP} = require(".././utils/otp");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -45,6 +46,64 @@ exports.loginUser = async (data) => {
 
   return { student, token };
 };
+
+exports.loginauth = async (email , password) => {
+  let user = null;
+  let role = null;
+
+  const admin = await Admin.findOne({email});
+
+  if(admin){
+    if (!admin.isActive){
+      throw new Error("Account is deactivated");
+    }
+
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if(!isMatch) {
+      throw new Error("Invalid email or password");
+    }
+
+    user = admin;
+    role = admin.role;
+  }
+
+    if (!user){
+      const student = await Student.findOne({email});
+
+      if(!student){
+        throw new Error("Invalid email or password");
+      }
+
+      const isMatch = await bcrypt.compare(password, student.password);
+      if(!isMatch){
+        throw new Error("Invalid email or password");
+      }
+
+      user = student ;
+      role = student.role;
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: role,
+      },
+      process.env.JWT_SECRET,
+      {expiresIn: "7d"}
+    );
+
+    return {
+      token ,
+      user: {
+        id: user._id,
+        fullName: user.fullName || user.profile?.fullName,
+        email: user.email,
+        role: role,
+        branch: user.branch || user.profile?.branch,
+      }
+    }
+  }
+
 
 
 exports.sendResetOtp = async (data) => {

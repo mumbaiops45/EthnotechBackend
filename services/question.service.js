@@ -19,7 +19,7 @@ exports.getQuestions = async (filters  = {} ) => {
 
 exports.getQuestionsById = async (id) =>{
     const question = await Question.findById(id);
-    if (!questions) throw new Error("Question not found");
+    if (!question) throw new Error("Question not found");
     return question;
 };
 
