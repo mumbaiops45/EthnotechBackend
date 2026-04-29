@@ -17,6 +17,7 @@ exports.registerUser = async (data) => {
     email,
     mobile,
     password: hashedPassword,
+      role: "Student",
   });
 
   return student;
@@ -37,7 +38,7 @@ exports.loginUser = async (data) => {
   }
 
   const token = jwt.sign(
-    { id: student._id, email: student.email },
+    { id: student._id, email: student.email ,  role: student.role  },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );
