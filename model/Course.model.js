@@ -34,6 +34,10 @@ const courseSchema = new Schema({
     program: {
         type: String
     },
+    batch: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Batch"
+},
     instructor:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Lesson",

@@ -4,6 +4,7 @@ const Student = require("../model/student.model");
 
 const auth = (req, res, next) => {
   const authHeader  = req.headers.authorization;
+ 
 
   if (!authHeader ) return res.status(401).json({ message: "No token" });
 
@@ -49,7 +50,24 @@ const adminOrAbove = (req, res, next) => {
   next();
 }
 
-module.exports = {auth, protect , superAdminOnly , adminOrAbove};
+
+const allowRoles = (...roles) => {
+  return (req, res, next) => {
+    const user = req.admin || req.instructor || req.user;
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!roles.includes(user.role)) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    next();
+  };
+};
+
+module.exports = {auth, protect , superAdminOnly , adminOrAbove , allowRoles};
 
 
 

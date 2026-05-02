@@ -13,7 +13,8 @@ const progressSchema = new Schema({
         required: true
     },
     batch: {
-        type: String
+         type: mongoose.Schema.Types.ObjectId,
+          ref: "Batch" 
     },
     lessons:[{
         lesson: {
@@ -50,6 +51,8 @@ const progressSchema = new Schema({
         default: 0
     },
 } ,{timestamps: true}) ;
+
+progressSchema.index({ student: 1, course: 1 }, { unique: true });
 
 
 module.exports = mongoose.model("Progress" , progressSchema);

@@ -22,6 +22,8 @@ const questionRoutes = require("./routes/question.route");
 const assessmentRoutes = require("./routes/assessment.route");
 const attemptRoutes     = require("./routes/attempt.route");
 const descriptiveRoutes = require("./routes/descriptive.route");
+const CertificateTemplateRoutes = require("./routes/certificateTemplate.route");
+const certificateRoutes = require("./routes/certificate.route");
 
 
 
@@ -30,6 +32,8 @@ const cors = require("cors");
 
 app.use(express.json());
 app.use(cors());
+
+app.use("/uploads", express.static("uploads"));
 // connectDB();
 connectDB().then(() => seedSuperAdmin());
 
@@ -50,6 +54,10 @@ app.use("/questions",    questionRoutes);
 app.use("/assessments",  assessmentRoutes);
 app.use("/attempts",     attemptRoutes);
 app.use("/descriptive",  descriptiveRoutes);
+
+
+app.use("/certificate-templates", CertificateTemplateRoutes);
+app.use("/certificates",          certificateRoutes);
 
 
 
