@@ -14,14 +14,28 @@ exports.createTemplate = async (req, res) => {
 };
 
 
-exports.getTemplates = async (req , res) => {
+// exports.getTemplates = async (req , res) => {
+//     try {
+//         const templates = await CertificateTemplate.findByIdAndUpdate(
+//             req.params.id , { $set: req.body}, { new: true}
+//         );
+//         res.status(200).json({message: "Template Updated", template});
+//     } catch (error) {
+//         res.status(400).json({message: error.message});
+//     }
+// };
+
+exports.getTemplates = async (req, res) => {
     try {
-        const templates = await CertificateTemplate.findByIdAndUpdate(
-            req.params.id , { $set: req.body}, { new: true}
-        );
-        res.status(200).json({message: "Template Updated", template});
+        const templates = await CertificateTemplate.find({});
+        res.status(200).json({
+            message: "Templates fetched successfully",
+            templates
+        });
     } catch (error) {
-        res.status(400).json({message: error.message});
+        res.status(500).json({
+            message: error.message
+        });
     }
 };
 

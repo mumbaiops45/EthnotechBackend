@@ -14,7 +14,7 @@ exports.submitAssignment = async (req, res) => {
 
 exports.getPendingSubmissions = async (req, res) => {
     try {
-        const submissions = await assignmentReviewService.getPendingSubmittions(req.instructor._id);
+        const submissions = await assignmentReviewService.getPendingSubmissions(req.instructor._id);
         res.status(200).json(submissions);
     } catch (error) {
         res.status(400).json({message: error.message});
