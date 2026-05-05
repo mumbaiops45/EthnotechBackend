@@ -10,6 +10,7 @@ router.get("/",                   instructorAuth, liveSessionController.getSessi
 router.get("/:id",                instructorAuth, liveSessionController.getSessionById);
 router.put("/:id",                instructorAuth, liveSessionController.updateSession);
 router.patch("/:id/cancel",       instructorAuth, liveSessionController.cancelSession);
+router.delete("/:id", instructorAuth , liveSessionController.deleteSession);
 router.patch("/:id/recording",    instructorAuth, liveSessionController.uploadRecording);
 
 router.get("/:id/join",           auth, liveSessionController.getJoinStatus);
@@ -18,9 +19,3 @@ module.exports = router;
 
 
 
-// router.post("/",              instructorAuth, liveSessionController.scheduleSession);
-// router.get("/",               instructorAuth, liveSessionController.getSessions);
-// router.get("/calendar",       instructorAuth, liveSessionController.getCalendar);
-// router.get("/:id",            instructorAuth, liveSessionController.getSessionById);
-// router.put("/:id",            instructorAuth, liveSessionController.updateSession);
-// router.patch("/:id/cancel",   instructorAuth, liveSessionController.cancelSession);

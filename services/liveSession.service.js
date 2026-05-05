@@ -10,7 +10,6 @@ exports.scheduleSession = async (instructorId, data) => {
     const linkActiveAt = new Date(
         new Date(data.scheduledAt).getTime() - 10 * 60 * 1000
     );
-
     const session = await LiveSession.create({
         ...data,
         instructor: instructorId,
@@ -20,15 +19,6 @@ exports.scheduleSession = async (instructorId, data) => {
 
     const batch = await Batch.findById(data.batch)
         .populate("students", "fullName Email Mobile");
-
-    // if(batch && batch.students.length > 0) {
-    //     const subject = `New Live Class Scheduled: ${session.title} `;
-    //     const message = `Your instructor has scheduled a live class "${session.title}" on ${new Date(session.date).toLocaleString()} for ${session.duration} minutes.`;
-    //     await notifyStudents(batch.students , subject, message);
-
-    //     session.notifiedStudents = batch.students.map(s => s._id);
-    //     await session.save();
-    // }
 
     if (batch?.students?.length > 0) {
         const title = `📅 New Live Class Scheduled: ${session.title}`;
@@ -94,8 +84,6 @@ exports.getJoinStatus = async (sessionId, studentId) => {
     };
 };
 
-
-
 exports.getSessions = async (instructorId) => {
     return LiveSession.find({ instructor: instructorId })
         .populate("batch", "name branch")
@@ -157,9 +145,6 @@ exports.cancelSession = async (sessionId, instructorId) => {
 
     if (batch?.students?.length > 0) {
         const title = `Live Class Cancelled: ${session.title}`;
-        //     const message = `The live class "${session.title}" scheduled for ${new Date(session.date).toLocaleString()} has been cancelled.`;
-        // await notifyStudents(batch.students, subject, message);
-        // }
         const message = `The class "${session.topic}" on ${new Date(session.scheduledAt).toLocaleString()} has been cancelled.`;
         await notifyStudents(batch.students, title, message, "live_class", session._id);
     }
@@ -193,6 +178,28 @@ exports.uploadRecording = async (sessionId, recordingUrl) => {
     return session;
 };
 
+exports.deleteSession = async (sessionId , instructorId) => {
+    const session = await LiveSession.findOneAndDelete({
+        _id: sessionId,
+        instructor: instructorId
+    });
+
+    if (!session) {
+        throw new Error("Session not found or not authorized to delete");
+    }
+
+    const batch = await Batch.findById(session.batch)
+    .populate("students", "fillName email mobile");
+
+    if(batch?.students?.length > 0){
+        const title = `Live Class Deleted: ${session.title}`;
+        const message = `The live session "${session.topic}" scheduled on ${new Date(session.scheduledAt).toLocaleString()} has been removed.`;
+
+         await notifyStudents(batch.students, title, message, "live_class", session._id);
+    }
+      return { message: "Session deleted successfully" };
+}
+
 exports.getCalendar = async (instructorId, month, year) => {
     const start = new Date(year, month - 1, 1);
     const end = new Date(year, month, 0, 23, 59, 59);
@@ -202,6 +209,8 @@ exports.getCalendar = async (instructorId, month, year) => {
         date: { $gte: start, $lte: end },
     }).populate("batch", "name").sort({ date: 1 });
 };
+
+
 
 
 

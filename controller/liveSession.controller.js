@@ -98,3 +98,17 @@ exports.uploadRecording = async (req, res) => {
         res.status(400).json({message: error.message});
     }
 }
+
+
+exports.deleteSession = async (req, res) => {
+    try {
+        const result = await liveSessionService.deleteSession(
+            req.params.id,
+            req.instructor._id
+        );
+
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({message: error.message});
+    }
+}

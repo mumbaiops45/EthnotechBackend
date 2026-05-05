@@ -4,7 +4,7 @@ exports.getBatchProgress = async (req, res) => {
     try {
         const instructorId = req.instructor.id;
 
-        // const {batch , course , sortBy} = req.query;
+        
         const batch = req.params.batch;
         
 
@@ -14,16 +14,10 @@ exports.getBatchProgress = async (req, res) => {
             return res.status(400).json({message: "Batch is required"});
         }
 
-        // const filters = {
-        //     course,
-        //     sortBy
-        // };
-
         const progress = await progressService.getBatchProgress(
             instructorId,
             batch,
             { course, sortBy } 
-            // filters
         );
 
         res.status(200).json(progress);

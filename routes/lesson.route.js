@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const lessonController = require("../controller/lesson.controller");
-const {instructorAuth} = require("../middlewares/instructor.middleware");
+const { instructorAuth } = require("../middlewares/instructor.middleware");
 
-router.post("/:courseId/module/:moduleId/lesson", instructorAuth , lessonController.createLesson);
-router.put("/lesson/:lessonId", instructorAuth , lessonController.updateLesson);
-router.delete("/lesson/:lessonId", instructorAuth , lessonController.deleteLesson);
-router.put("/:courseId/module/:moduleId/lesson/reorder", instructorAuth , lessonController.reorderLessons);
+router.get(
+    "/course/:courseId/module/:moduleId/lessons", lessonController.getLessonsByModule);
+
+router.get("/lesson/:lessonId", lessonController.getLessonById);
+router.post("/:courseId/module/:moduleId/lesson", instructorAuth, lessonController.createLesson);
+router.put("/lesson/:lessonId", instructorAuth, lessonController.updateLesson);
+router.delete("/lesson/:lessonId", instructorAuth, lessonController.deleteLesson);
+router.put("/:courseId/module/:moduleId/lesson/reorder", instructorAuth, lessonController.reorderLessons);
 
 module.exports = router;
