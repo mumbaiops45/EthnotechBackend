@@ -3,7 +3,7 @@ const Course = require("../model/Course.model");
 
 exports.getLessonByModule = async (courseId , moduleId) => {
     const lessons = await Lesson.find({
-        course: CourseId, 
+        course: courseId, 
         module: moduleId
     }).sort({ order: 1});
 

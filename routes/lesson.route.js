@@ -4,7 +4,7 @@ const lessonController = require("../controller/lesson.controller");
 const { instructorAuth } = require("../middlewares/instructor.middleware");
 
 router.get(
-    "/course/:courseId/module/:moduleId/lessons", lessonController.getLessonsByModule);
+    "/course/:courseId/lessons", lessonController.getLessonsByModule);
 
 router.get("/lesson/:lessonId", lessonController.getLessonById);
 router.post("/:courseId/module/:moduleId/lesson", instructorAuth, lessonController.createLesson);
