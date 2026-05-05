@@ -7,7 +7,7 @@ router.get("/my" , auth , certificateController.getStudentCertificates);
 router.get("/download/:certificateId",  auth, certificateController.downloadCertificate);
 
 
-// Admin routes
+
 router.post("/trigger",     protect, adminOrAbove, certificateController.triggerAutoGeneration);
 router.post("/manual",      protect, adminOrAbove, certificateController.manualGenerate);
 router.get("/all",          protect, adminOrAbove, certificateController.getAllCertificates);

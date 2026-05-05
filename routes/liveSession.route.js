@@ -12,7 +12,6 @@ router.put("/:id",                instructorAuth, liveSessionController.updateSe
 router.patch("/:id/cancel",       instructorAuth, liveSessionController.cancelSession);
 router.patch("/:id/recording",    instructorAuth, liveSessionController.uploadRecording);
 
-
 router.get("/:id/join",           auth, liveSessionController.getJoinStatus);
 
 module.exports = router;

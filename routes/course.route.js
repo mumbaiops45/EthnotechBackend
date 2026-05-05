@@ -1,12 +1,24 @@
 const express  = require("express");
 const router = express.Router();
+const Course = require("../model/Course.model");
 const courseController = require("../controller/course.controller");
 const {instructorAuth} = require("../middlewares/instructor.middleware");  
-const {auth, protect , superAdminOnly} = require("../middlewares/auth.middleware");
+const {auth, protect , adminOrAbove , superAdminOnly} = require("../middlewares/auth.middleware");
 
 router.post("/", instructorAuth , courseController.createCourse);
 
 router.get("/", instructorAuth  , courseController.getCourse);
+router.get("/admin/all", protect, adminOrAbove, async (req, res) => {
+  try {
+    const courses = await Course.find({})
+      .populate("instructor", "fullName email")
+      .populate("modules.lessons", "title")
+      .sort({ createdAt: -1 });
+    res.status(200).json(courses);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 
 router.get("/:id" , instructorAuth , courseController.getCourseById);
 
@@ -20,68 +32,3 @@ router.put("/:id/module/reorder", instructorAuth, courseController.reorderModule
 
 module.exports = router;
 
-// const express  = require("express");
-// const router = express.Router();
-
-// const courseController = require("../controller/course.controller");
-
-// const { instructorAuth } = require("../middlewares/instructor.middleware");
-// const { protect } = require("../middlewares/auth.middleware");
-// const { allowRoles } = require("../middlewares/auth.middleware");
-
-// // 🔴 CREATE COURSE
-// router.post(
-//   "/",
-//   protect,
-//   allowRoles("SuperAdmin", "Instructor"),
-//   courseController.createCourse
-// );
-
-// // 🔴 GET ALL COURSES
-// router.get(
-//   "/",
-//   protect,
-//   allowRoles("SuperAdmin", "Instructor"),
-//   courseController.getCourse
-// );
-
-// // 🔴 GET COURSE BY ID
-// router.get(
-//   "/:id",
-//   protect,
-//   allowRoles("SuperAdmin", "Instructor"),
-//   courseController.getCourseById
-// );
-
-// // 🔴 UPDATE COURSE
-// router.put(
-//   "/:id",
-//   protect,
-//   allowRoles("SuperAdmin", "Instructor"),
-//   courseController.updateCourse
-// );
-
-// // 🔴 DELETE COURSE (ONLY SUPER ADMIN)
-// router.delete(
-//   "/:id",
-//   protect,
-//   allowRoles("SuperAdmin"),
-//   courseController.deleteCourse
-// );
-
-// // 🔴 MODULE MANAGEMENT
-// router.post(
-//   "/:id/module",
-//   protect,
-//   allowRoles("SuperAdmin", "Instructor"),
-//   courseController.addModule
-// );
-
-// router.put(
-//   "/:id/module/reorder",
-//   protect,
-//   allowRoles("SuperAdmin", "Instructor"),
-//   courseController.reorderModule
-// );
-
-// module.exports = router;
