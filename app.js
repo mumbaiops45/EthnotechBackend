@@ -24,6 +24,9 @@ const attemptRoutes     = require("./routes/attempt.route");
 const descriptiveRoutes = require("./routes/descriptive.route");
 const CertificateTemplateRoutes = require("./routes/certificateTemplate.route");
 const certificateRoutes = require("./routes/certificate.route");
+const dashboardRoutes = require("./routes/dashboard.route");
+const videoProgressRoutes = require("./routes/videoProgress.route");
+const notificationRoutes = require("./routes/notification.route");
 
 
 
@@ -54,12 +57,76 @@ app.use("/questions",    questionRoutes);
 app.use("/assessments",  assessmentRoutes);
 app.use("/attempts",     attemptRoutes);
 app.use("/descriptive",  descriptiveRoutes);
+app.use("/dashboard",      dashboardRoutes);
+app.use("/video-progress", videoProgressRoutes);
+app.use("/notifications",  notificationRoutes);
 
 
 app.use("/certificate-templates", CertificateTemplateRoutes);
 app.use("/certificates",          certificateRoutes);
 
+// app.post("/test-notification", async (req, res) => {
+//   try {
+//     console.log("Body:", req.body);
+//     console.log("StudentId:", req.body?.studentId);
 
+//     const studentId    = req.body?.studentId;
+//     const Notification = require("./model/Notification.model");
+//     const Student      = require("./model/student.model");
+//     const mongoose     = require("mongoose");
+
+//     // ✅ Validate ObjectId format first
+//     if (!mongoose.Types.ObjectId.isValid(studentId)) {
+//       return res.status(400).json({ message: "Invalid studentId format" });
+//     }
+
+//     // ✅ Check student exists
+//     const student = await Student.findById(studentId);
+//     console.log("Student found:", student); // ← check terminal
+
+//     if (!student) {
+//       return res.status(404).json({
+//         message: "Student not found in DB",
+//         searchedId: studentId
+//       });
+//     }
+
+//     const notif = await Notification.create({
+//       student:  new mongoose.Types.ObjectId(studentId), // ✅ convert to ObjectId
+//       title:    "Test Notification",
+//       message:  "This is a test notification",
+//       type:     "general",
+//       isRead:   false,
+//     });
+
+//     res.json({ message: "Notification created", notif });
+//   } catch (err) {
+//     console.error("Error:", err); // ← full error in terminal
+//     res.status(400).json({ message: err.message });
+//   }
+// });
+
+
+// app.get("/debug-student/:id", async (req, res) => {
+//   try {
+//     const Student  = require("./model/student.model");
+//     const mongoose = require("mongoose");
+
+//     const id = req.params.id;
+
+//     if (!mongoose.Types.ObjectId.isValid(id))
+//       return res.status(400).json({ message: "Invalid ID format" });
+
+//     const student = await Student.findById(id).select("-password -otp");
+
+//     if (!student)
+//       return res.status(404).json({ message: "Student not found" });
+
+//     res.json({ found: true, student });
+//   } catch (err) {
+//     res.status(400).json({ message: err.message });
+//   }
+// });
 
 runReminderJob();
 app.listen(8080, () => {

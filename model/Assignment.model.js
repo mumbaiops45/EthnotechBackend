@@ -1,22 +1,22 @@
 const mongoose = require("mongoose");
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
-const assignmentSchema = new Schema ({
-    title :{
-        type: String, 
+const assignmentSchema = new Schema({
+    title: {
+        type: String,
         required: true
     },
-    description:{
+    description: {
         type: String,
     },
     type: {
-        type: String, 
+        type: String,
         enum: ["descriptive", "file-upload"],
         required: true
     },
     course: {
-type: mongoose.Schema.Types.ObjectId,
-ref: "Course"
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course"
     },
     lesson: {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,20 +26,20 @@ ref: "Course"
         type: mongoose.Schema.Types.ObjectId
     },
     deadline: {
-        type:Date,
+        type: Date,
         required: true
     },
     totalMarks: {
         type: Number,
         required: true
     },
-    passingMarks : {
+    passingMarks: {
         type: Number,
         required: true
     },
     assignTo: {
         type: String,
-        enum: ["batch" , "all"],
+        enum: ["batch", "all"],
         default: "all"
     },
     batch: {
@@ -48,8 +48,8 @@ ref: "Course"
     instructor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Instructor"
-    },  
-}, {timestamps: true});
+    },
+}, { timestamps: true });
 
 
 module.exports = mongoose.model("Assignment", assignmentSchema);
